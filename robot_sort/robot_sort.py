@@ -81,11 +81,13 @@ class SortingRobot:
         Turn on the robot's light
         """
         self._light = "ON"
+
     def set_light_off(self):
         """
         Turn off the robot's light
         """
         self._light = "OFF"
+
     def light_is_on(self):
         """
         Returns True if the robot's light is on and False otherwise.
@@ -97,8 +99,60 @@ class SortingRobot:
         Sort the robot's list.
         """
         # Fill this out
-        pass
+        # This seems like a good place for either a merge or bubble sort
+        # Starting with attempting a merge sort solution
+        # if self.can_move_right():
+        # Realized that merge sort would require stored variables for left and right
+        # Attempting bubble sort instead
+        # Robot needs to use light as the bool to determine when it's done sorting
+        # Each time through, Robot will pick up the item, move right swapping the item if the item at the new point
+        # is less until it reaches the end and finds the smallest item
+        # Robot will then move left until he finds the empty position (compare returns "None") and place the item down
+        # Robot will then move right to the next position and start the loop again
+        # Sort ends when move_through_list finds no positions to swap other than the last position
+        # (i.e. Robot picked up the last position and called move_through_list)
+        # This sort should be O(nlogn) as it it will iterate the first time through the entirety of the n passed in,
+        # but then smaller portions each time after the first time
 
+        self.set_light_on()
+        while self.light_is_on():
+            self.set_light_off()
+            self.swap_item()
+            self.move_through_list()
+            self.move_right()
+
+    def move_through_list(self):
+        while self.can_move_right():
+            self.move_right()
+            if self.compare_item() == 1:
+                self.swap_item()
+                self.set_light_on()
+        if self.compare_item() is None:
+            self.swap_item()
+            return
+        while self.can_move_left():
+            self.move_left()
+            if self.compare_item() is None:
+                self.swap_item()
+                break
+
+        # while self.can_move_right():
+        #     self.move_right()
+        #     if self.compare_item() == -1:
+        #         self.swap_item()
+        #         self.set_light_on()
+        # self.swap_item()
+        # self.move_left()
+        # self.swap_item()
+        # while self.can_move_left():
+        #     self.move_left()
+        #     if self.compare_item() == 1:
+        #         self.swap_item()
+        #         self.set_light_on()
+        #     elif self.compare_item() == None:
+        #         self.swap_item()
+        #         self.set_light_on()
+        #         break
 
 if __name__ == "__main__":
     # Test our your implementation from the command line
